@@ -88,3 +88,12 @@ With this setup, cron-job.org will ping your server every 10 minutes, completely
 - Tiptap (Rich Text Editor)
 - Yjs (CRDT for collaboration)
 - y-websocket (WebSocket binding for Yjs)
+
+
+
+
+future scope:
+chat should have attachments feature
+enable sign in sign up to save the docs
+the doc id generated should be small and can be pasted on the url directly
+check security, password needed to enter the room or the room creator can allow or deny entry into room.
