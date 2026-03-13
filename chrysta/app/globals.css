@@ -2,24 +2,24 @@
 
 @theme {
   --color-primary: #2e5b60;
-  --color-background-light: #FAF9F7;
+  --color-background-light: #F5F4F1;
   --color-background-dark: #151c1d;
-  
+
   --font-display: "Inter", sans-serif;
-  
+
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
 }
 
 :root {
-  --background: #FAF9F7;
-  --foreground: #0f172a; /* slate-900 */
+  --background: #F5F4F1;
+  --foreground: #0f172a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #151c1d;
-    --foreground: #f8fafc; /* slate-50 */
+    --foreground: #f8fafc;
   }
 }
 
@@ -29,6 +29,98 @@ body {
   font-family: var(--font-display);
 }
 
+/* ── Tiptap editor typography ── */
+.ProseMirror {
+  outline: none;
+  min-height: 60vh;
+}
+
+.ProseMirror p {
+  margin: 0.5em 0;
+  line-height: 1.75;
+  color: #1e293b;
+}
+
+.ProseMirror h1 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #0f172a;
+  margin: 1.25em 0 0.5em;
+}
+
+.ProseMirror h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 1em 0 0.4em;
+}
+
+.ProseMirror h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin: 0.9em 0 0.35em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5em;
+  margin: 0.75em 0;
+}
+
+.ProseMirror li {
+  margin: 0.3em 0;
+  line-height: 1.7;
+  color: #1e293b;
+}
+
+.ProseMirror li::marker {
+  color: #94a3b8;
+}
+
+.ProseMirror strong {
+  font-weight: 700;
+}
+
+.ProseMirror em {
+  font-style: italic;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+}
+
+/* Yjs collaboration cursor */
+.collaboration-cursor__caret {
+  border-left: 2px solid;
+  border-right: 2px solid;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+  position: relative;
+  word-break: normal;
+}
+
+.collaboration-cursor__label {
+  border-radius: 4px 4px 4px 0;
+  color: #fff;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  left: -1px;
+  line-height: normal;
+  padding: 2px 6px;
+  position: absolute;
+  top: -1.6em;
+  user-select: none;
+  white-space: nowrap;
+}
+
 .soft-gradient-bg {
-    background: radial-gradient(circle at 50% 50%, rgba(46, 91, 96, 0.05) 0%, rgba(250, 249, 247, 0) 50%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(46, 91, 96, 0.05) 0%,
+    rgba(245, 244, 241, 0) 50%
+  );
 }

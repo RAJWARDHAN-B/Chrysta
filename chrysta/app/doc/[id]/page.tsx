@@ -2,32 +2,60 @@
 
 import { use, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Navbar from "@/components/Navbar";
 import ChatSidebar from "@/components/ChatSidebar";
 
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
-export default function DocumentPage({ params }: { params: Promise<{ id: string }> }) {
+const USER_COLORS = [
+  "#7C6AF7", "#F97316", "#10B981", "#F43F5E",
+  "#3B82F6", "#EC4899", "#14B8A6", "#F59E0B",
+];
+
+export default function DocumentPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id: docId } = use(params);
   const [userName, setUserName] = useState<string>("");
+  const [userColor, setUserColor] = useState<string>("");
 
   useEffect(() => {
-    // Generate a simple anonymous username
-    const anonymousName = `User ${Math.floor(Math.random() * 1000)}`;
-    setUserName(anonymousName);
+    // Persist identity in sessionStorage so refreshes keep the same name
+    const storedName = sessionStorage.getItem("chrysta-username");
+    const storedColor = sessionStorage.getItem("chrysta-usercolor");
+
+    const name = storedName ?? `User ${Math.floor(Math.random() * 900) + 100}`;
+    const color =
+      storedColor ?? USER_COLORS[Math.floor(Math.random() * USER_COLORS.length)];
+
+    if (!storedName) sessionStorage.setItem("chrysta-username", name);
+    if (!storedColor) sessionStorage.setItem("chrysta-usercolor", color);
+
+    setUserName(name);
+    setUserColor(color);
   }, []);
 
+  if (!userName) return null; // wait for hydration
+
   return (
-    <div className="flex flex-col h-screen bg-background-light dark:bg-background-dark overflow-hidden">
-      <Navbar />
-      <div className="flex flex-1 overflow-hidden">
-        <main className="flex-1 overflow-y-auto relative py-12 px-6 md:px-12 flex justify-center">
-          <div className="w-full max-w-4xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200 dark:border-slate-800 rounded-lg p-8 md:p-12 min-h-screen mb-20">
-            <Editor docId={docId} userName={userName} />
-          </div>
-        </main>
-        <ChatSidebar docId={docId} userName={userName} />
+    <div className="flex h-screen overflow-hidden bg-[#F5F4F1]">
+      {/* Editor (takes all remaining width) */}
+      <div className="flex-1 min-w-0 overflow-hidden">
+        <Editor
+          docId={docId}
+          userName={userName}
+          userColor={userColor}
+          docName={`Document · ${docId.slice(0, 8)}`}
+        />
       </div>
+
+      {/* Chat sidebar (fixed width) */}
+      <ChatSidebar
+        docId={docId}
+        userName={userName}
+        userColor={userColor}
+      />
     </div>
   );
 }

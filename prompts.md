@@ -269,3 +269,5 @@ Tailwind styling for layout
 
 Generate production-ready Next.js + React + Tailwind + Tiptap + Yjs code step by step. Include comments explaining key parts. Keep it modular and easy to extend.
 
+
+

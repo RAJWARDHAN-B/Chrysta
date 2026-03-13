@@ -3,32 +3,48 @@
 import { useEffect, useState, useRef } from "react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
-import { Send, User as UserIcon, MessageSquare } from "lucide-react";
+import { Send } from "lucide-react";
 
 interface Message {
   id: string;
   user: string;
   text: string;
   timestamp: number;
+  color: string;
 }
 
 interface ChatSidebarProps {
   docId: string;
   userName: string;
+  userColor: string;
+  activeUsers?: { name: string; color: string }[];
 }
 
-const ChatSidebar = ({ docId, userName }: ChatSidebarProps) => {
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+const fmt = (ts: number) =>
+  new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+const ChatSidebar = ({
+  docId,
+  userName,
+  userColor,
+  activeUsers = [],
+}: ChatSidebarProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
-  const [isOpen, setIsOpen] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  
-  // Yjs setup for chat
+
   const [ydoc] = useState(() => new Y.Doc());
   const [yMessages] = useState(() => ydoc.getArray<Message>("chat-messages"));
 
   useEffect(() => {
-    // Connect to the same socket server but different room suffix for clarity (or same room)
     const provider = new WebsocketProvider(
       "ws://localhost:1234",
       `${docId}-chat`,
@@ -45,7 +61,6 @@ const ChatSidebar = ({ docId, userName }: ChatSidebarProps) => {
   }, [docId, ydoc, yMessages]);
 
   useEffect(() => {
-    // Scroll to bottom when new messages arrive
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -54,79 +69,118 @@ const ChatSidebar = ({ docId, userName }: ChatSidebarProps) => {
     if (!inputText.trim()) return;
 
     const newMessage: Message = {
-      id: Math.random().toString(36).substr(2, 9),
+      id: Math.random().toString(36).slice(2, 11),
       user: userName,
       text: inputText,
       timestamp: Date.now(),
+      color: userColor,
     };
 
     yMessages.push([newMessage]);
     setInputText("");
   };
 
-  return (
-    <div className={`relative flex flex-col border-l border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-300 ${isOpen ? "w-80" : "w-0 overflow-hidden"}`}>
-      {/* Toggle Button */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="absolute -left-10 top-4 p-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-l-lg shadow-sm"
-      >
-        <MessageSquare size={20} className="text-slate-600 dark:text-slate-400" />
-      </button>
+  const activeCount = activeUsers.length || 1;
 
-      <div className="p-4 border-b border-slate-100 dark:border-slate-800">
-        <h3 className="font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
-          <MessageSquare size={18} className="text-primary" />
-          Chat
-        </h3>
+  return (
+    <aside className="w-72 shrink-0 flex flex-col border-l border-slate-200 bg-white h-full">
+      {/* Header */}
+      <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          {/* Chat icon */}
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-slate-500">
+            <path
+              d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3-3h7c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
+              stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
+            />
+          </svg>
+          <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
+            Room Chat
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-xs text-slate-500 font-medium">{activeCount} active</span>
+        </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
+      {/* Messages */}
+      <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4">
         {messages.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-slate-400 text-sm gap-2">
-            <MessageSquare size={48} className="opacity-20" />
-            <p>No messages yet. Start the conversation!</p>
+          <div className="flex flex-col items-center justify-center h-full text-slate-300 text-sm gap-2 select-none">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            <p className="text-center leading-snug">No messages yet.<br />Start the conversation!</p>
           </div>
         ) : (
-          messages.map((msg) => (
-            <div key={msg.id} className={`flex flex-col gap-1 ${msg.user === userName ? "items-end" : "items-start"}`}>
-              <div className="flex items-center gap-1.5 mb-1">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{msg.user}</span>
+          messages.map((msg) => {
+            const isMe = msg.user === userName;
+            return (
+              <div key={msg.id} className="flex flex-col gap-1">
+                {isMe ? (
+                  /* ── My message (right-aligned teal bubble) ── */
+                  <>
+                    <span className="text-[10px] text-slate-400 text-right mr-1">
+                      {fmt(msg.timestamp)} <span className="font-semibold">Me</span>
+                    </span>
+                    <div className="flex justify-end">
+                      <div className="bg-[#2e5b60] text-white text-sm px-3 py-2 rounded-2xl rounded-tr-sm max-w-[85%] leading-relaxed">
+                        {msg.text}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  /* ── Other users (left-aligned with avatar) ── */
+                  <div className="flex items-start gap-2">
+                    <div
+                      className="size-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white shrink-0 mt-0.5"
+                      style={{ backgroundColor: msg.color || "#7C6AF7" }}
+                    >
+                      {initials(msg.user)}
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[11px] font-semibold text-slate-600">
+                          {msg.user.split(" ")[0]} {msg.user.split(" ").slice(1, 2).join("")[0] ? msg.user.split(" ").slice(1, 2).join("")[0] + "." : ""}
+                        </span>
+                        <span className="text-[10px] text-slate-400">{fmt(msg.timestamp)}</span>
+                      </div>
+                      <div className="bg-slate-100 text-slate-700 text-sm px-3 py-2 rounded-2xl rounded-tl-sm max-w-[85%] leading-relaxed">
+                        {msg.text}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className={`px-3 py-2 rounded-2xl text-sm max-w-[85%] ${
-                msg.user === userName 
-                  ? "bg-primary text-white rounded-tr-none" 
-                  : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-tl-none"
-              }`}>
-                {msg.text}
-              </div>
-              <span className="text-[10px] text-slate-400">
-                {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </span>
-            </div>
-          ))
+            );
+          })
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={sendMessage} className="p-4 border-t border-slate-100 dark:border-slate-800">
-        <div className="relative">
+      {/* Input */}
+      <form
+        onSubmit={sendMessage}
+        className="px-3 py-3 border-t border-slate-100"
+      >
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 focus-within:border-[#2e5b60]/40 focus-within:ring-2 focus-within:ring-[#2e5b60]/10 transition-all">
           <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Type a message..."
-            className="w-full pl-4 pr-10 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border-none focus:ring-2 focus:ring-primary/20 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400"
+            className="flex-1 bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
           />
           <button
             type="submit"
-            className="absolute right-2 top-1.5 p-1 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+            className="text-[#2e5b60] hover:text-[#1e3e42] transition-colors shrink-0"
           >
-            <Send size={18} />
+            <Send size={16} />
           </button>
         </div>
       </form>
-    </div>
+    </aside>
   );
 };
 
