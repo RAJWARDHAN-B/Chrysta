@@ -271,3 +271,5 @@ Generate production-ready Next.js + React + Tailwind + Tiptap + Yjs code step by
 
 
 
+3. 
+make sure the chat feature works too and make the editor page responsive, it looks like this currrently

@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import * as Y from "yjs";
 import { WebsocketProvider } from "y-websocket";
-import { Send } from "lucide-react";
+import { Send, MessageCircle, X } from "lucide-react";
 
 interface Message {
   id: string;
@@ -39,6 +39,7 @@ const ChatSidebar = ({
 }: ChatSidebarProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [ydoc] = useState(() => new Y.Doc());
@@ -46,7 +47,7 @@ const ChatSidebar = ({
 
   useEffect(() => {
     const provider = new WebsocketProvider(
-      "ws://localhost:1234",
+      "wss://chrysta.onrender.com",
       `${docId}-chat`,
       ydoc
     );
@@ -83,26 +84,57 @@ const ChatSidebar = ({
   const activeCount = activeUsers.length || 1;
 
   return (
-    <aside className="w-72 shrink-0 flex flex-col border-l border-slate-200 bg-white h-full">
-      {/* Header */}
-      <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {/* Chat icon */}
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-slate-500">
-            <path
-              d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3-3h7c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
-              stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
-            />
-          </svg>
-          <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
-            Room Chat
-          </span>
+    <>
+      {/* Floating Action Button (Mobile Only) */}
+      <button
+        onClick={() => setIsOpen(true)}
+        className="md:hidden fixed bottom-6 right-6 z-40 p-4 bg-[#2e5b60] text-white rounded-full shadow-lg hover:bg-[#1e3e42] transition-colors flex items-center justify-center"
+      >
+        <MessageCircle size={24} />
+      </button>
+
+      {/* Backdrop for Mobile Overlay */}
+      {isOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-slate-900/20 z-40 backdrop-blur-sm transition-opacity"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Main Sidebar Container */}
+      <aside
+        className={`fixed inset-y-0 right-0 z-50 flex flex-col w-80 md:w-72 bg-white h-full border-l border-slate-200 shadow-2xl md:shadow-none transform transition-transform duration-300 md:relative md:translate-x-0 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Header */}
+        <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {/* Chat icon */}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="text-slate-500 hidden md:block">
+              <path
+                d="M14 1H2C1.45 1 1 1.45 1 2v9c0 .55.45 1 1 1h2v3l3-3h7c.55 0 1-.45 1-1V2c0-.55-.45-1-1-1z"
+                stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"
+              />
+            </svg>
+            <span className="text-xs font-bold tracking-widest text-slate-500 uppercase">
+              Room Chat
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5">
+              <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs text-slate-500 font-medium">{activeCount} active</span>
+            </div>
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setIsOpen(false)}
+              className="md:hidden text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs text-slate-500 font-medium">{activeCount} active</span>
-        </div>
-      </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-4">
@@ -180,7 +212,8 @@ const ChatSidebar = ({
           </button>
         </div>
       </form>
-    </aside>
+      </aside>
+    </>
   );
 };
 
