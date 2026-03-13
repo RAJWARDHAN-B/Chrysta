@@ -39,37 +39,52 @@ const DocNavbar = ({
     }`;
 
   return (
-    <header className="h-12 flex items-center justify-between px-4 border-b border-slate-200 bg-white shrink-0 z-30">
+    <header className="h-auto md:h-12 py-2 md:py-0 flex flex-wrap md:flex-nowrap items-center justify-between px-4 border-b border-slate-200 bg-white shrink-0 z-30 gap-y-2 relative">
       {/* ── Left: Logo + doc name ── */}
-      <div className="flex items-center gap-3 min-w-0">
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="size-7 rounded-md overflow-hidden bg-[#2e5b60] flex items-center justify-center">
-            <Image
-              src="/chrystalogobg.png"
-              alt="Chrysta"
-              width={28}
-              height={28}
-              className="object-contain"
-            />
+      <div className="flex items-center gap-3 min-w-0 w-full md:w-auto justify-between md:justify-start order-1">
+        <div className="flex items-center gap-3 min-w-0">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <div className="size-7 rounded-md overflow-hidden bg-[#2e5b60] flex items-center justify-center">
+              <Image
+                src="/chrystalogobg.png"
+                alt="Chrysta"
+                width={28}
+                height={28}
+                className="object-contain"
+              />
+            </div>
+            <span className="font-bold text-sm text-slate-800 hidden sm:block">Chrysta</span>
+          </Link>
+
+          <span className="text-slate-300 select-none">·</span>
+
+          <div className="flex items-center gap-1 min-w-0">
+            <span className="text-sm font-medium text-slate-700 truncate max-w-[180px]">
+              {docName}
+            </span>
+            <button className="text-slate-400 hover:text-amber-400 transition-colors shrink-0">
+              <Star size={14} />
+            </button>
           </div>
-          <span className="font-bold text-sm text-slate-800 hidden sm:block">Chrysta</span>
-        </Link>
+        </div>
 
-        <span className="text-slate-300 select-none">·</span>
-
-        <div className="flex items-center gap-1 min-w-0">
-          <span className="text-sm font-medium text-slate-700 truncate max-w-[180px]">
-            {docName}
-          </span>
-          <button className="text-slate-400 hover:text-amber-400 transition-colors shrink-0">
-            <Star size={14} />
+        {/* Mobile Right: Share */}
+        <div className="flex md:hidden items-center gap-2 shrink-0">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 transition-colors"
+          >
+            <Share2 size={13} />
+            Share
           </button>
         </div>
       </div>
 
       {/* ── Centre: Formatting toolbar ── */}
       {editor && (
-        <div className="flex items-center gap-0.5 absolute left-1/2 -translate-x-1/2">
+        <div className="flex items-center gap-0.5 md:absolute md:left-1/2 md:-translate-x-1/2 order-3 md:order-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0 justify-start md:justify-center no-scrollbar">
           <button
             onClick={() => editor.chain().focus().undo().run()}
             className="p-1.5 rounded hover:bg-slate-100 transition-colors text-slate-500"
@@ -144,7 +159,7 @@ const DocNavbar = ({
       )}
 
       {/* ── Right: Avatars + Share ── */}
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="hidden md:flex items-center gap-2 shrink-0 order-2 md:order-3">
         {/* Active user avatars */}
         {activeUsers.length > 0 && (
           <div className="flex -space-x-2">

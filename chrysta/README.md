@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chrysta
+
+Chrysta is a real-time collaborative document editor designed for modern teams, built with Next.js, Tiptap, and Yjs.
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies:
+```bash
+npm install
+```
 
+Then, run the development server:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+
+Remember to also start the WebSocket server for real-time collaboration:
+```bash
+npm run socket
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deploying on Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Vercel is the easiest way to deploy a Next.js application. Follow these steps to deploy Chrysta:
 
-## Learn More
+1. **Push your code to GitHub, GitLab, or Bitbucket.**
+   Make sure all your local changes (including `package.json` updates and the Next.js app) are pushed to your remote repository.
 
-To learn more about Next.js, take a look at the following resources:
+2. **Sign in to Vercel**
+   Go to [vercel.com](https://vercel.com) and sign in using your Git provider.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Import the Project**
+   - Click on **Add New...** -> **Project**.
+   - Select the repository containing Chrysta and click **Import**.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Configure Project Settings**
+   - Vercel will automatically detect that it's a Next.js project.
+   - Expand the **Build and Output Settings** if necessary (the defaults usually work perfectly: `npm run build`).
+   - If your project environment variables are needed, add them in the **Environment Variables** section.
+   
+5. **WebSocket Hosting (Important)**
+   Because Vercel is a serverless environment, it does not support long-running processes like the `y-websocket` server out-of-the-box. 
+   - You will need to host your WebSocket server separately (e.g., on Render, Railway, or Heroku, or via a service like Hocuspocus/Liveblocks).
+   - Once your WebSocket server is hosted elsewhere, update the WebSocket URL in your `Editor.tsx` connection to point to your new hosted WebSocket instance (e.g., `wss://your-hosted-ws-server.com`).
 
-## Deploy on Vercel
+6. **Deploy**
+   - Click the **Deploy** button. Vercel will build and launch your application.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+7. **Visit your live site**
+   Once the build completes, Vercel will provide you with a live, secure URL for your application!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Technologies Used
+- Next.js (App Router)
+- React
+- Tailwind CSS
+- Tiptap (Rich Text Editor)
+- Yjs (CRDT for collaboration)
+- y-websocket (WebSocket binding for Yjs)

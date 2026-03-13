@@ -116,8 +116,8 @@ const Editor = ({ docId, userName, userColor, docName }: EditorProps) => {
       />
 
       {/* Paper area */}
-      <div className="flex-1 overflow-y-auto py-10 px-4 sm:px-8">
-        <div className="mx-auto max-w-[780px] bg-white shadow-sm rounded-lg px-12 py-14 min-h-[calc(100vh-120px)]">
+      <div className="flex-1 overflow-y-auto py-6 sm:py-10 px-2 sm:px-4 md:px-8">
+        <div className="mx-auto max-w-[780px] bg-white shadow-sm rounded-lg px-4 sm:px-8 md:px-12 py-8 sm:py-14 min-h-[calc(100vh-120px)]">
           <EditorContent editor={editor} />
         </div>
       </div>
