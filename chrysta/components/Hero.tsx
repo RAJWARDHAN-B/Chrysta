@@ -1,6 +1,17 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
 
 const Hero = () => {
+  const router = useRouter();
+
+  const handleCreate = () => {
+    const id = uuidv4();
+    router.push(`/doc/${id}`);
+  };
+
   return (
     <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 md:pt-32 md:pb-24 text-center">
       <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold mb-6 tracking-wide uppercase">
@@ -17,7 +28,10 @@ const Hero = () => {
         A real-time collaborative document editor designed for modern teams. Write, brainstorm, and publish in one fluid workspace.
       </p>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <button className="w-full sm:w-auto min-w-[200px] bg-primary text-white h-14 px-8 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2">
+        <button 
+          onClick={handleCreate}
+          className="w-full sm:w-auto min-w-[200px] bg-primary text-white h-14 px-8 rounded-xl font-bold text-lg shadow-lg shadow-primary/20 hover:shadow-xl hover:translate-y-[-2px] transition-all flex items-center justify-center gap-2"
+        >
           <span className="material-symbols-outlined">add</span>
           Create Document
         </button>

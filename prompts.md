@@ -176,3 +176,96 @@ Start with home page in the design given below and use the @beautifulMentionfor 
 </div>
 </body></html>
 
+2.
+Goal: Build a minimal MVP with rich-text editing, real-time collaboration, and a chat sidebar.
+
+Requirements:
+
+1. Pages & Routing
+
+/ → Homepage with "Create Document" button
+
+/doc/[id] → Collaborative editor page with a unique document room
+
+Clicking "Create Document" generates a UUID and navigates to /doc/:id
+
+2. Collaborative Editor
+
+Use Tiptap as the rich-text editor
+
+Implement:
+
+Typography: font family, font size, text color
+
+Text styling: bold, italic, underline
+
+Structure: title, subtitle, normal text
+
+Lists: bullet points
+
+Alignment: left, center, right
+
+Integrate Yjs + y-websocket for real-time collaboration
+
+Sync document state live for multiple users in the same room
+
+Show cursors or user presence optionally
+
+3. Chat Sidebar
+
+Sidebar on the right side of the editor
+
+Users in the same room can send messages
+
+Messages are synced in real time
+
+Show scrollable chat history during the session
+
+Include an input box with “Enter to send”
+
+4. Styling
+
+Use Tailwind CSS
+
+Elegant, minimal layout similar to Notion or Craft
+
+Light background, soft accent colors (#2F5D62, #FAF9F7)
+
+Toolbar at the top with formatting buttons
+
+Editor in the center, chat sidebar on the right
+
+5. Backend / WebSocket
+
+Implement y-websocket server using Node.js or Express
+
+Connect the Tiptap + Yjs client to the WebSocket server
+
+Ensure live updates are reflected for all users
+
+6. Extra
+
+Generate a copy link button in the toolbar to share the document
+
+Show online users in the room (optional)
+
+No authentication required, anonymous users
+
+Output Requested
+
+React / Next.js component code for:
+
+Editor page (/doc/[id])
+
+Toolbar with formatting options
+
+Chat sidebar and input
+
+Integration with Yjs WebSocket
+
+Minimal backend code for y-websocket server
+
+Tailwind styling for layout
+
+Generate production-ready Next.js + React + Tailwind + Tiptap + Yjs code step by step. Include comments explaining key parts. Keep it modular and easy to extend.
+
