@@ -29,7 +29,7 @@ const Editor = ({ docId, userName, userColor, docName }: EditorProps) => {
 
   useEffect(() => {
     const wsProvider = new WebsocketProvider(
-      "ws://localhost:1234",
+      "wss://chrysta.onrender.com",
       docId,
       ydoc
     );
