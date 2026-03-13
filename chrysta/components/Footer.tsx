@@ -7,11 +7,11 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex items-center gap-2.5 opacity-80">
           <div className="size-6 bg-primary rounded text-white flex items-center justify-center">
-            <Image 
-              src="/chrystalogobg.png" 
-              alt="Chrysta Logo" 
-              width={24} 
-              height={24} 
+            <Image
+              src="/chrystalogobg.png"
+              alt="Chrysta Logo"
+              width={24}
+              height={24}
               className="rounded object-contain"
             />
           </div>
@@ -23,7 +23,7 @@ const Footer = () => {
           <Link className="hover:text-primary transition-colors" href="#">Twitter</Link>
           <Link className="hover:text-primary transition-colors" href="#">Contact</Link>
         </div>
-        <p className="text-sm text-slate-400">© 2024 Chrysta Editor Inc.</p>
+        <p className="text-sm text-slate-400">© 2026 Chrysta Editor Inc.</p>
       </div>
     </footer>
   );

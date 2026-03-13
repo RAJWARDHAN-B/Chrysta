@@ -7,7 +7,7 @@ const Navbar = () => {
       <div className="flex items-center gap-2.5">
         <div className="flex items-center justify-center size-9 bg-primary rounded-lg text-white">
           <Image 
-            src="/chrystalogobg.png" 
+            src="/chrystalogo.png" 
             alt="Chrysta Logo" 
             width={36} 
             height={36} 

@@ -273,3 +273,6 @@ Generate production-ready Next.js + React + Tailwind + Tiptap + Yjs code step by
 
 3. 
 make sure the chat feature works too and make the editor page responsive, it looks like this currrently
+
+4.
+there should also be a feedback when the link is copied after clicking the share button

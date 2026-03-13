@@ -7,8 +7,9 @@ import {
   Undo2, Redo2,
   Bold, Italic, Underline as UnderlineIcon,
   AlignLeft, AlignRight,
-  ChevronDown, Star, Share2,
+  ChevronDown, Star, Share2, List, ListOrdered, Check,
 } from "lucide-react";
+import { useState } from "react";
 
 interface DocNavbarProps {
   editor: Editor | null;
@@ -33,6 +34,14 @@ const DocNavbar = ({
   docName = "Untitled Document",
   activeUsers = [],
 }: DocNavbarProps) => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const btn = (active: boolean) =>
     `p-1.5 rounded hover:bg-slate-100 transition-colors ${
       active ? "text-[#2e5b60] bg-[#2e5b60]/10" : "text-slate-600"
@@ -46,7 +55,7 @@ const DocNavbar = ({
           <Link href="/" className="flex items-center gap-2 shrink-0">
             <div className="size-7 rounded-md overflow-hidden bg-[#2e5b60] flex items-center justify-center">
               <Image
-                src="/chrystalogobg.png"
+                src="/chrystalogo.png"
                 alt="Chrysta"
                 width={28}
                 height={28}
@@ -71,13 +80,13 @@ const DocNavbar = ({
         {/* Mobile Right: Share */}
         <div className="flex md:hidden items-center gap-2 shrink-0">
           <button
-            onClick={() => {
-              navigator.clipboard.writeText(window.location.href);
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 transition-colors"
+            onClick={handleCopyLink}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+              copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
+            }`}
           >
-            <Share2 size={13} />
-            Share
+            {copied ? <Check size={13} /> : <Share2 size={13} />}
+            {copied ? "Copied!" : "Share"}
           </button>
         </div>
       </div>
@@ -155,6 +164,23 @@ const DocNavbar = ({
           >
             <AlignRight size={16} />
           </button>
+
+          <span className="w-px h-4 bg-slate-200 mx-1" />
+
+          <button
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={btn(editor.isActive("bulletList"))}
+            title="Bullet List"
+          >
+            <List size={16} />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={btn(editor.isActive("orderedList"))}
+            title="Numbered List"
+          >
+            <ListOrdered size={16} />
+          </button>
         </div>
       )}
 
@@ -182,13 +208,13 @@ const DocNavbar = ({
         )}
 
         <button
-          onClick={() => {
-            navigator.clipboard.writeText(window.location.href);
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-700 transition-colors"
+          onClick={handleCopyLink}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
+            copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
+          }`}
         >
-          <Share2 size={13} />
-          Share
+          {copied ? <Check size={13} /> : <Share2 size={13} />}
+          {copied ? "Copied!" : "Share"}
         </button>
       </div>
     </header>
