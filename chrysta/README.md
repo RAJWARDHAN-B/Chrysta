@@ -97,3 +97,10 @@ chat should have attachments feature
 enable sign in sign up to save the docs
 the doc id generated should be small and can be pasted on the url directly
 check security, password needed to enter the room or the room creator can allow or deny entry into room.
+emojis in chat
+chat should restrict offensive words
+
+Hero section update - use gradient text Magic from react bits 
+use scroll velocity
+give it a modern look
+use framer motion for animations
