@@ -169,7 +169,7 @@ Start with home page in the design given below and use the @beautifulMentionfor 
 <a class="hover:text-primary transition-colors" href="#">Twitter</a>
 <a class="hover:text-primary transition-colors" href="#">Contact</a>
 </div>
-<p class="text-sm text-slate-400">© 2024 Chrysta Editor Inc.</p>
+<p class="text-sm text-slate-400">© 2026 Chrysta Editor Inc.</p>
 </div>
 </footer>
 </div>

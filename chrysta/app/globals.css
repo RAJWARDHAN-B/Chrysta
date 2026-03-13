@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #2e5b60;
+  --color-background-light: #FAF9F7;
+  --color-background-dark: #151c1d;
+  
+  --font-display: "Inter", sans-serif;
+  
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root {
+  --background: #FAF9F7;
+  --foreground: #0f172a; /* slate-900 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #151c1d;
+    --foreground: #f8fafc; /* slate-50 */
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-display);
+}
+
+.soft-gradient-bg {
+    background: radial-gradient(circle at 50% 50%, rgba(46, 91, 96, 0.05) 0%, rgba(250, 249, 247, 0) 50%);
 }
