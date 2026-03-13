@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "socket": "cross-env HOST=localhost PORT=1234 npx y-websocket",
-    "start:socket": "cross-env HOST=0.0.0.0 npx y-websocket",
+    "socket": "cross-env HOST=localhost PORT=1234 npx -y y-websocket@1.5.0",
+    "start:socket": "cross-env HOST=0.0.0.0 npx -y y-websocket@1.5.0",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
