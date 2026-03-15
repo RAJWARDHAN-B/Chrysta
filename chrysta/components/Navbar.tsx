@@ -5,9 +5,9 @@ const Navbar = () => {
   return (
     <header className="mx-auto w-full max-w-7xl px-6 md:px-10 py-6 flex items-center justify-between">
       <div className="flex items-center gap-2.5">
-        <div className="flex items-center justify-center size-9 bg-primary rounded-lg text-white">
+        <div className="flex items-center justify-center size-9 rounded-lg text-white">
           <Image 
-            src="/chrystalogo.png" 
+            src="/chrystalogobg.png" 
             alt="Chrysta Logo" 
             width={36} 
             height={36} 

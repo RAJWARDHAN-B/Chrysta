@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="border-t border-slate-200 dark:border-slate-800 py-12 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex items-center gap-2.5 opacity-80">
-          <div className="size-6 bg-primary rounded text-white flex items-center justify-center">
+          <div className="size-6 rounded text-white flex items-center justify-center">
             <Image
               src="/chrystalogobg.png"
               alt="Chrysta Logo"

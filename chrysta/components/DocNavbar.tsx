@@ -8,8 +8,10 @@ import {
   Bold, Italic, Underline as UnderlineIcon,
   AlignLeft, AlignRight,
   ChevronDown, Star, Share2, List, ListOrdered, Check,
+  FileDown, FileText
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { downloadAsPDF, downloadAsDOCX } from "@/lib/export";
 
 interface DocNavbarProps {
   editor: Editor | null;
@@ -35,6 +37,18 @@ const DocNavbar = ({
   activeUsers = [],
 }: DocNavbarProps) => {
   const [copied, setCopied] = useState(false);
+  const [showDownload, setShowDownload] = useState(false);
+  const downloadRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (downloadRef.current && !downloadRef.current.contains(event.target as Node)) {
+        setShowDownload(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
@@ -46,6 +60,8 @@ const DocNavbar = ({
     `p-1.5 rounded hover:bg-slate-100 transition-colors ${
       active ? "text-[#2e5b60] bg-[#2e5b60]/10" : "text-slate-600"
     }`;
+
+  const downloadBtn = "flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 w-full text-left transition-colors";
 
   return (
     <header className="h-auto md:h-12 py-2 md:py-0 flex flex-wrap md:flex-nowrap items-center justify-between px-4 border-b border-slate-200 bg-white shrink-0 z-30 gap-y-2 relative">
@@ -67,18 +83,31 @@ const DocNavbar = ({
 
           <span className="text-slate-300 select-none">·</span>
 
-          <div className="flex items-center gap-1 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
             <span className="text-sm font-medium text-slate-700 truncate max-w-[180px]">
               {docName}
             </span>
             <button className="text-slate-400 hover:text-amber-400 transition-colors shrink-0">
               <Star size={14} />
             </button>
+            <div 
+              className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[11px] font-bold border border-slate-200 cursor-help"
+              title="Give this code to others to join this room"
+            >
+              ID: <span className="text-slate-800 uppercase tracking-wider">{docId}</span>
+            </div>
           </div>
         </div>
 
         {/* Mobile Right: Share */}
         <div className="flex md:hidden items-center gap-2 shrink-0">
+          <button
+            onClick={() => editor && downloadAsPDF(editor, docName)}
+            className="p-2 rounded-lg bg-slate-100 text-slate-700 active:bg-slate-200 transition-colors"
+            title="Download PDF"
+          >
+            <FileDown size={18} />
+          </button>
           <button
             onClick={handleCopyLink}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
@@ -188,7 +217,7 @@ const DocNavbar = ({
       <div className="hidden md:flex items-center gap-2 shrink-0 order-2 md:order-3">
         {/* Active user avatars */}
         {activeUsers.length > 0 && (
-          <div className="flex -space-x-2">
+          <div className="flex -space-x-2 mr-2">
             {activeUsers.slice(0, 3).map((u, i) => (
               <div
                 key={i}
@@ -206,6 +235,44 @@ const DocNavbar = ({
             )}
           </div>
         )}
+
+        {/* Download Dropdown */}
+        <div className="relative" ref={downloadRef}>
+          <button
+            onClick={() => setShowDownload(!showDownload)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+            title="Download Document"
+          >
+            <FileDown size={14} />
+            <span className="hidden lg:inline">Download</span>
+            <ChevronDown size={12} className={`transition-transform ${showDownload ? 'rotate-180' : ''}`} />
+          </button>
+
+          {showDownload && editor && (
+            <div className="absolute right-0 mt-2 w-48 bg-white border border-slate-200 rounded-xl shadow-xl z-50 py-1 overflow-hidden">
+              <button
+                onClick={() => {
+                  downloadAsPDF(editor, docName);
+                  setShowDownload(false);
+                }}
+                className={downloadBtn}
+              >
+                <FileText size={14} className="text-red-500" />
+                PDF Document (.pdf)
+              </button>
+              <button
+                onClick={() => {
+                  downloadAsDOCX(editor, docName);
+                  setShowDownload(false);
+                }}
+                className={downloadBtn}
+              >
+                <FileText size={14} className="text-blue-500" />
+                Word Document (.docx)
+              </button>
+            </div>
+          )}
+        </div>
 
         <button
           onClick={handleCopyLink}

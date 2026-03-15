@@ -101,6 +101,6 @@ emojis in chat
 chat should restrict offensive words
 
 Hero section update - use gradient text Magic from react bits 
-use scroll velocity
+use scroll velocityg
 give it a modern look
 use framer motion for animations
