@@ -57,8 +57,7 @@ const DocNavbar = ({
   };
 
   const btn = (active: boolean) =>
-    `p-1.5 rounded hover:bg-slate-100 transition-colors ${
-      active ? "text-[#2e5b60] bg-[#2e5b60]/10" : "text-slate-600"
+    `p-1.5 rounded hover:bg-slate-100 transition-colors ${active ? "text-[#2e5b60] bg-[#2e5b60]/10" : "text-slate-600"
     }`;
 
   const downloadBtn = "flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 w-full text-left transition-colors";
@@ -69,16 +68,16 @@ const DocNavbar = ({
       <div className="flex items-center gap-3 min-w-0 w-full md:w-auto justify-between md:justify-start order-1">
         <div className="flex items-center gap-3 min-w-0">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <div className="size-7 rounded-md overflow-hidden bg-[#2e5b60] flex items-center justify-center">
+            <div className="size-7 rounded-md overflow-hidden flex items-center justify-center">
               <Image
-                src="/chrystalogo.png"
+                src="/chrystalogobg.png"
                 alt="Chrysta"
                 width={28}
                 height={28}
                 className="object-contain"
               />
             </div>
-            <span className="font-bold text-sm text-slate-800 hidden sm:block">Chrysta</span>
+            {/* <span className="font-bold text-sm text-slate-800 hidden sm:block">Chrysta</span> */}
           </Link>
 
           <span className="text-slate-300 select-none">·</span>
@@ -90,7 +89,7 @@ const DocNavbar = ({
             <button className="text-slate-400 hover:text-amber-400 transition-colors shrink-0">
               <Star size={14} />
             </button>
-            <div 
+            <div
               className="hidden sm:flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 text-[11px] font-bold border border-slate-200 cursor-help"
               title="Give this code to others to join this room"
             >
@@ -110,9 +109,8 @@ const DocNavbar = ({
           </button>
           <button
             onClick={handleCopyLink}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-              copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
-            }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
+              }`}
           >
             {copied ? <Check size={13} /> : <Share2 size={13} />}
             {copied ? "Copied!" : "Share"}
@@ -276,9 +274,8 @@ const DocNavbar = ({
 
         <button
           onClick={handleCopyLink}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${
-            copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
-          }`}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${copied ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-900 text-white hover:bg-slate-700"
+            }`}
         >
           {copied ? <Check size={13} /> : <Share2 size={13} />}
           {copied ? "Copied!" : "Share"}

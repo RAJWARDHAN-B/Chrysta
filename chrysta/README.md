@@ -104,3 +104,11 @@ Hero section update - use gradient text Magic from react bits
 use scroll velocityg
 give it a modern look
 use framer motion for animations
+
+Client-side PDF generation with:
+html2pdf.js
+html2canvas
+is known to break with modern CSS.
+Large editors (Notion, Coda, etc.) usually switch to server rendering with:
+Puppeteer
+because it supports all modern CSS including lab().
